@@ -101,11 +101,11 @@ class Player extends Entity {
 
   // update player state from buttons state
   moving() {
-    for(let direction in this.buttons) {
+    this.buttons.forEach( (direction) => {
       if(this.buttons[direction].state) {
         this.moveSelf(direction);
       } 
-    }
+    });
   }
 
   moveSelf(to) {
@@ -129,8 +129,6 @@ class Player extends Entity {
   
   update() {
     this.facing = facingAngle(this.x, this.y, mouse.x, mouse.y);
-
-
 
     // store keydown event to game state in this.buttons obj
     document.addEventListener('keydown', event => {
