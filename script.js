@@ -5,41 +5,7 @@ canvas.height = window.innerHeight;
 
 var c = canvas.getContext('2d');
 
-// // rects
-// c.fillStyle = 'rgba(255, 100, 0, 0.5)';
-// c.fillRect(100, 100, 100, 100);
-// c.fillStyle = 'rgba(255, 200, 0, 0.5)';
-// c.fillRect(100, 200, 100, 100);
-// c.fillStyle = 'rgba(255, 100, 100, 0.5)';
-// c.fillRect(300, 200, 100, 100);
 
-// // lines
-// c.beginPath();
-// c.moveTo(50, 50);
-// c.lineTo(300, 100);
-// c.lineTo(400, 300);
-// c.strokeStyle = '#000000';
-// c.stroke();
-
-
-// // Arc / Circle
-// c.beginPath();
-// c.arc(300, 300, 30, 0, Math.PI * 2);
-// c.stroke();
-
-
-
-// var drawTwoLine = function(x, y) {
-// 	c.beginPath();
-// 	c.moveTo(x, y);
-// 	c.lineTo(x * 2, y/2);
-// 	c.moveTo(x, y);
-// 	c.lineTo(x * 2, y * 2);
-// 	c.strokeStyle = '#ffffff';
-// 	c.stroke();
-// }
-
-// drawTwoLine(100, 100)
 var mouse = {
   x: undefined,
   y: undefined,
