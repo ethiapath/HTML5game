@@ -133,9 +133,6 @@ class Player extends Entity {
         }
       });
     });
-
-
-
    }
  
   draw() {
