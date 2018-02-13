@@ -74,23 +74,6 @@ class Entity {
       right: () => {this.x += this.d;}
     }
     actions[to]();
-
-    // switch (to) {
-    //   case 'up':
-    //     this.y -= this.d;
-    //     break;
-    //   case 'right':
-    //     this.x += this.d;
-    //     break;
-    //   case 'down':
-    //     this.y += this.d;
-    //     break;
-    //   case 'left':
-    //     this.x -= this.d;
-    //     break;
-    // default:
-    //     break;
-    // }
   }
 }
 function  facingAngle(startX, startY, targetX, targetY) {
@@ -200,7 +183,7 @@ function Circle(x, y, dx, dy, ax, ay, radius) {
 	this.dy = dy;
 	this.ax = ax;
 	this.ay = ay;
-    this.color = colorArray[Math.floor(Math.random() * colorArray.length)];
+  this.color = colorArray[Math.floor(Math.random() * colorArray.length)];
 
 	this.draw = function() {
 		c.beginPath();
