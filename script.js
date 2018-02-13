@@ -116,7 +116,27 @@ class Player extends Entity {
       left: { value: 65, state: false },
       right: { value: 68, state: false }
     }
-  }
+     // store keydown event to game state in this.buttons obj
+    document.addEventListener('keydown', event => {
+      // this.keyPressTranslater(event); 
+      this.buttons.forEach( (k, o) => {
+        if(event.keyCode === o[k].value) {
+          o[k].state = true;
+        }
+      });
+    });
+    // recheck button state from keyup event
+    document.addEventListener('keyup', event => {
+      this.buttons.forEach( (k, o) => {
+        if(event.keyCode === o[k].value) {
+          o[k].state = false;
+        }
+      });
+    });
+
+
+
+   }
  
   draw() {
      c.fillStyle = 'rgba(255, 100, 0, 0.5)';
@@ -135,49 +155,11 @@ class Player extends Entity {
 
   update() {
     this.facing = facingAngle(this.x, this.y, mouse.x, mouse.y);
-
-    // store keydown event to game state in this.buttons obj
-    document.addEventListener('keydown', event => {
-      // this.keyPressTranslater(event); 
-      this.buttons.forEach( (k, o) => {
-        if(event.keyCode === o[k].value) {
-          o[k].state = true;
-        }
-      });
-    });
     
     // update game state from based on this.buttons state
     this.moving();
 
-    // recheck button state from keyup event
-    document.addEventListener('keyup', event => {
-      this.buttons.forEach( (k, o) => {
-        if(event.keyCode === o[k].value) {
-          o[k].state = false;
-        }
-      });
-    });
     this.draw();
-  }
-
-  keyPressTranslater(event) {
-    if (event.keyCode === 65) {
-      this.direction += ' left';
-    }
-    else if (event.keyCode === 68) {
-      // this.x += this.d;
-      this.direction += ' right';
-    }
-    else if (event.keyCode === 87) {
-      this.direction += ' up';
-    }
-    else if (event.keyCode == 83) {
-      this.direction += ' down';
-    }
-    let words = this.direction.split(' ');
-    if (words.length > 2) {
-      this.direction = words[0] + ' ' + words[1];
-    }
   }
 }
 
