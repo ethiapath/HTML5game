@@ -66,7 +66,32 @@ class Entity {
   update() {
     this.draw();
   }
+  moveSelf(to) {
+    const actions = {
+      up: () => {this.y -= this.d; },
+      down: () => {this.y += this.d;},
+      left: () => {this.x -= this.d;},
+      right: () => {this.x += this.d;}
+    }
+    actions[to]();
 
+    // switch (to) {
+    //   case 'up':
+    //     this.y -= this.d;
+    //     break;
+    //   case 'right':
+    //     this.x += this.d;
+    //     break;
+    //   case 'down':
+    //     this.y += this.d;
+    //     break;
+    //   case 'left':
+    //     this.x -= this.d;
+    //     break;
+    // default:
+    //     break;
+    // }
+  }
 }
 function  facingAngle(startX, startY, targetX, targetY) {
   return Math.atan((startY-targetY)/(startX-targetX)); 
@@ -108,25 +133,6 @@ class Player extends Entity {
     });
   }
 
-  moveSelf(to) {
-    switch (to) {
-      case 'up':
-        this.y -= this.d;
-        break;
-      case 'right':
-        this.x += this.d;
-        break;
-      case 'down':
-        this.y += this.d;
-        break;
-      case 'left':
-        this.x -= this.d;
-        break;
-    default:
-        break;
-    }
-  }
-  
   update() {
     this.facing = facingAngle(this.x, this.y, mouse.x, mouse.y);
 
@@ -308,13 +314,14 @@ function init() {
 
 init();
 
-// game loop
+// game loop  
+let count = 0;
 function animate() {
 
-  let count = 0;
+
   let debugInfo = [
-    entities[0].isMoving,
-    entities[0].direction,
+    'Debug Info:',
+    entities[0].facing,
     count++
   ];
   const fontSize = '14';
@@ -336,7 +343,7 @@ function animate() {
   // draw debug info
   debugInfo.forEach( (i, n) => {
     // let iWidth = c.measureText(i).width;
-    c.fillText(i, 10/*canvas.width - iWidth -10*/, fontSize * n);
+    c.fillText(i, 5/*canvas.width - iWidth -10*/, (fontSize * n));
   });
 }
 
