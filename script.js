@@ -4,6 +4,7 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 var c = canvas.getContext('2d');
+var audioCtx = new AudioContext();
 
 
 var mouse = {
@@ -66,15 +67,6 @@ class Entity {
   update() {
     this.draw();
   }
-  moveSelf(to) {
-    const actions = {
-      up: () => {this.y -= this.d; },
-      down: () => {this.y += this.d;},
-      left: () => {this.x -= this.d;},
-      right: () => {this.x += this.d;}
-    }
-    actions[to]();
-  }
 }
 function  facingAngle(startX, startY, targetX, targetY) {
   return Math.atan((startY-targetY)/(startX-targetX)); 
@@ -94,10 +86,26 @@ class Player extends Entity {
     this.d = 10;
     this.facing = 0;
     this.buttons = {
-      up: { value: 87, state: false },
-      down: { value: 83, state: false },
-      left: { value: 65, state: false },
-      right: { value: 68, state: false }
+      up: { 
+        value: 87, 
+        state: false, 
+        action: () => {this.y -= this.d; }
+      },
+      down: { 
+        value: 83, 
+        state: false,
+        action: () => {this.y += this.d;}
+      },
+      left: { 
+        value: 65, 
+        state: false,
+        action: () => {this.x -= this.d;}
+      },
+      right: { 
+        value: 68, 
+        state: false,
+        action: () => {this.x += this.d;}
+      }
     }
      // store keydown event to game state in this.buttons obj
     document.addEventListener('keydown', event => {
@@ -120,7 +128,7 @@ class Player extends Entity {
  
   draw() {
      c.fillStyle = 'rgba(255, 100, 0, 0.5)';
-     c.fillRect(this.x, this.y, this.size, this.size);
+     c.fillRect((this.x - this.size/2), (this.y - this.size/2), this.size, this.size);
     //  rotate(this.facing, this.x, this.y);
   }
 
@@ -128,7 +136,7 @@ class Player extends Entity {
   moving() {
     this.buttons.forEach( (direction) => {
       if(this.buttons[direction].state) {
-        this.moveSelf(direction);
+        this.buttons[direction].action();
       } 
     });
   }
@@ -153,11 +161,13 @@ class Zombie extends Entity {
   }
   
   draw() {
-		c.beginPath();
-		c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+		// c.beginPath();
+		// c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+    this.color = colorArray[Math.floor(Math.random() * colorArray.length)];
     c.fillStyle = this.color;
-		c.stroke();
-		c.fill();
+		// c.stroke();
+    // c.fill();
+    c.fillRect((this.x - this.size/2), (this.y - this.size/2), this.size, this.size);
   }
   
   update() {
@@ -174,56 +184,6 @@ class Zombie extends Entity {
   }
 }
 
-function Circle(x, y, dx, dy, ax, ay, radius) {
-	this.radius = radius;
-    this.minRadius = radius
-	this.x = x;
-	this.y = y;
-	this.dx = dx;
-	this.dy = dy;
-	this.ax = ax;
-	this.ay = ay;
-  this.color = colorArray[Math.floor(Math.random() * colorArray.length)];
-
-	this.draw = function() {
-		c.beginPath();
-		c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
-        c.fillStyle = this.color;
-		c.stroke();
-		c.fill();
-	}
-
-	this.update = function() {
-		if (this.x + this.radius > innerWidth - 1
-            || this.x - this.radius < 1) {
-			this.dx = - this.dx;
-		}
-		this.x += this.dx;
-//		this.dx += this.ax;
-		if (this.y + this.radius > innerHeight - 1
-            || this.y - this.radius < 1) {
-			this.dy = - this.dy;
-		}
-		this.y += this.dy;
-        
-		this.dy -= this.ay;
-      
-        // interactivity
-    
-    if (mouse.x - this.x < 50 && mouse.x - this.x > -50
-        && mouse.y - this.y < 50 && mouse.y - this.y > -50) {
-      if (this.radius < maxRadius) {
-        this.radius += 1;
-      }
-    } else if (this.radius > minRadius){
-      this.radius -= 1;
-    }
-      
-      
-		this.draw();
-	}
-}
-
 function Pointer(x, y) {
 	this.radius = 5;
 	this.x = x;
@@ -233,7 +193,7 @@ function Pointer(x, y) {
 
 	this.draw = function() {
 		c.beginPath();
-		c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+		c.arc((this.x - this.radius/2), (this.y - this.radius/2), this.radius, 0, Math.PI * 2, false);
     c.fillStyle = this.color;
 		c.stroke();
 		c.fill();
@@ -293,7 +253,7 @@ function animate() {
   if (count < 0) {
     epochs++;
     init();
-    count = countStart;
+    count = countStart - epochs;
   }
   const fontSize = '14';
   c.fillStyle = '#000000';
@@ -309,6 +269,8 @@ function animate() {
   // wipe screen
 	c.clearRect(0, 0, innerWidth, innerHeight);
 
+  // c.fillStyle  = '#000000';//colorArray[Math.floor(Math.random() * colorArray.length)];
+  // c.fillRect(0, 0, innerWidth, innerHeight);
   // update entities state and draw them
   for (let i = entities.length-1; i >= 0; i--) {
     entities[i].update();
