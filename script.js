@@ -163,7 +163,7 @@ class Zombie extends Entity {
   draw() {
 		// c.beginPath();
 		// c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
-    this.color = colorArray[Math.floor(Math.random() * colorArray.length)];
+    // this.color = colorArray[Math.floor(Math.random() * colorArray.length)];
     c.fillStyle = this.color;
 		// c.stroke();
     // c.fill();
