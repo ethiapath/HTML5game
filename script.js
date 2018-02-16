@@ -155,7 +155,7 @@ class Zombie extends Entity {
   draw() {
 		c.beginPath();
 		c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
-        c.fillStyle = this.color;
+    c.fillStyle = this.color;
 		c.stroke();
 		c.fill();
   }
@@ -240,10 +240,11 @@ function Pointer(x, y) {
 	}
 
 	this.update = function() {
+    if (mouse.x !== 'undefined' && mouse.y !== 'undefined') {
       this.x = mouse.x;
       this.y = mouse.y;
-      
       this.draw();
+    }
 	}
 }
 
@@ -277,16 +278,25 @@ function init() {
 init();
 
 // game loop  
-let count = 0;
+const countStart = 500;
+let epochs = 0;
+let count = -1;
 function animate() {
 
 
   let debugInfo = [
     'Debug Info:',
     entities[0].facing,
-    count++
+    count--,
+    epochs
   ];
+  if (count < 0) {
+    epochs++;
+    init();
+    count = countStart;
+  }
   const fontSize = '14';
+  c.fillStyle = '#000000';
   c.font = fontSize + 'px serif';
   entities[0].buttons.forEach((key, obj) => {
     debugInfo.push(key);
@@ -300,13 +310,19 @@ function animate() {
 	c.clearRect(0, 0, innerWidth, innerHeight);
 
   // update entities state and draw them
-  entities.forEach( e => e.update());
+  for (let i = entities.length-1; i >= 0; i--) {
+    entities[i].update();
+  }
+  // entities.forEach( e => {
+
+  // });
 
   // draw debug info
   debugInfo.forEach( (i, n) => {
     // let iWidth = c.measureText(i).width;
     c.fillText(i, 5/*canvas.width - iWidth -10*/, (fontSize * n));
   });
+    entities[1].update();
 }
 
 // setInterval(function() {
