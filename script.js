@@ -54,6 +54,16 @@ function moveOneRadTowardsTarget(startX, startY, targetX, targetY, radius) {
     return pos;
 }
 
+const detectCollison = (rect1, rect2, action) => {
+  if (rect1.x < rect2.x + rect2.size &&
+    rect1.x + rect1.size > rect2.x &&
+    rect1.y < rect2.y + rect2.size &&
+    rect1.size + rect1.y > rect2.y) {
+     // collision detected!
+     action(rect1, rect2);
+ }
+}
+
 class Entity {
   constructor(x, y) {
     this.x = x;
@@ -83,7 +93,7 @@ class Player extends Entity {
   constructor(x, y) {
     super(x,y);
     this.size = 50;
-    this.d = 10;
+    this.d = 7;
     this.facing = 0;
     this.buttons = {
       up: { 
@@ -191,6 +201,8 @@ function Pointer(x, y) {
 
   this.color = '#000000';
 
+
+
 	this.draw = function() {
 		c.beginPath();
 		c.arc((this.x - this.radius/2), (this.y - this.radius/2), this.radius, 0, Math.PI * 2, false);
@@ -208,62 +220,88 @@ function Pointer(x, y) {
 	}
 }
 
+class Bullet extends Entity {
+  constructor(x, y) {
+    super(x, y);
+    this.size = 5;
+    this.d = 10;
+    this.color = '#000000';
+    this.target = {x: entities[1].x, y: entities[1].y};
+    this.isBackwards = (this.x > this.target.x && this.y < this.target.y || this.x > this.target.x && this.y > this.target.y);
+    this.angle = facingAngle(entities[1].x, entities[1].y, entities[0].x, entities[0].y);
+
+  }
+  draw() {
+    c.fillStyle = this.color;
+    c.fillRect((this.x - this.size/2), (this.y - this.size/2), this.size, this.size);
+  }
+  update() {
+    let movement = { 
+      x: this.d * Math.cos(this.angle),
+      y: this.d * Math.sin(this.angle)
+    };
+    if (this.isBackwards) {
+      movement.x = -movement.x;
+      movement.y = -movement.y;
+    }
+
+    this.x += movement.x;
+    this.y += movement.y;
+    this.draw();
+  }
+}
+document.addEventListener('click', (event) => {
+  projectiles.push(new Bullet(entities[0].x, entities[0].y));
+  console.log('clicked!')
+})
 var entities = [];
+
+var projectiles = [];
 
 var startPos = {
   x: window.innerWidth/2,
-  y: window.innerHeight/2
+  y: window.innerHeight/4
 };
 
 var x = 100;
 var y = 100;
-
+let score = 0;
+const countStart = 500;
+let epochs = 0;
+let count = -1;
 function init() {
+  count = 0;
   entities = [];
+  projectiles = [];
   // create player
   entities.push(new Player(startPos.x, startPos.y));
   entities.push(new Pointer(mouse.x, mouse.y));
-  for (var i = 0; i <= 9; i += 1) {
-      var x = innerWidth * (Math.random());
-      var y = innerHeight * (Math.random());
-      entities.push(new Zombie(x, y));
-//      var dx = (Math.random() - 0.5) * 8;
-//      var dy = (Math.random() - 0.5) * 8;
-//      var ax = 0;//(Math.random() - 0.5);
-//      var ay = 1;//(Math.random() - 0.5);
-//      var radius = Math.random() * 20;
-  }
 }
 
 init();
 
 // game loop  
-const countStart = 500;
-let epochs = 0;
-let count = -1;
-function animate() {
 
+function animate() {
+  if (entities.length < 100 && !(count % 60)) {
+    entities.push(new Zombie( (innerWidth * Math.random()), innerHeight));
+    entities.push(new Zombie( innerWidth, (innerHeight * Math.random())));
+    entities.push(new Zombie( 0, (innerHeight * Math.random())));
+    entities.push(new Zombie( (innerWidth * Math.random()), 0));
+  }
 
   let debugInfo = [
     'Debug Info:',
     entities[0].facing,
     count--,
-    epochs
+    epochs,
+    score
   ];
-  if (count < 0) {
-    epochs++;
-    init();
-    count = countStart - epochs;
-  }
+
   const fontSize = '14';
-  c.fillStyle = '#000000';
   c.font = fontSize + 'px serif';
-  entities[0].buttons.forEach((key, obj) => {
-    debugInfo.push(key);
-    obj[key].forEach( (k, o) => {
-      debugInfo.push(k + ': ' + o[k])
-    });
-  });
+
+
 
   requestAnimationFrame(animate);
   // wipe screen
@@ -272,6 +310,28 @@ function animate() {
   // c.fillStyle  = '#000000';//colorArray[Math.floor(Math.random() * colorArray.length)];
   // c.fillRect(0, 0, innerWidth, innerHeight);
   // update entities state and draw them
+
+  // reset game if zombie touches player
+  for (let i = 1; i < entities.length; i++) {
+    detectCollison(entities[0], entities[i], (rect1, rect2) => {
+      score = 0;
+      init();
+    });
+  }  
+
+  projectiles.forEach( i => {
+    i.update();
+    for (let j = 1; j < entities.length; j++) {
+      detectCollison(i, entities[j], (rect1, rect2) => {
+        entities[j] = '';
+        score++;
+      });
+    }
+
+  });
+  let uncolided = entities.filter( entity => typeof entity !== 'string');
+  entities = uncolided;
+  if (entities.length <= 2) { init(); }
   for (let i = entities.length-1; i >= 0; i--) {
     entities[i].update();
   }
@@ -280,6 +340,7 @@ function animate() {
   // });
 
   // draw debug info
+  c.fillStyle = '#000000';
   debugInfo.forEach( (i, n) => {
     // let iWidth = c.measureText(i).width;
     c.fillText(i, 5/*canvas.width - iWidth -10*/, (fontSize * n));
