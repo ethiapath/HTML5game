@@ -326,10 +326,19 @@ function animate() {
     });
   }  
 
+  // remove zombie if hit by projectile
   projectiles.forEach( i => {
     i.update();
     for (let j = 1; j < entities.length; j++) {
-      detectCollison(i, entities[j], (rect1, rect2) => {
+
+      // I need to figure out a better way of doing this
+      tempPos = {
+        x: entities[j].x - entities[j].size/2,
+        y: entities[j].y - entities[j].size/2,
+        size: entities[j].size
+      };
+
+      detectCollison(i, tempPos, (rect1, rect2) => {
         entities[j] = '';
         score++;
       });
@@ -338,7 +347,8 @@ function animate() {
   });
   let uncolided = entities.filter( entity => typeof entity !== 'string');
   entities = uncolided;
-  if (entities.length <= 2) { init(); }
+  if (entities.length <= 2) { init(); } // reset game if there are no zombies
+  
   for (let i = entities.length-1; i >= 0; i--) {
     entities[i].update();
   }
