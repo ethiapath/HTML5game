@@ -286,6 +286,7 @@ init();
 
 function animate() {
   if (!(count % 120) && rate !== 1) { rate--; epochs++;}
+  if (!(score % 10)) { rate /= 2;}
   if (entities.length < 1000 && !(count % rate)) {
     entities.push(new Zombie( (innerWidth * Math.random()), innerHeight));
     entities.push(new Zombie( innerWidth, (innerHeight * Math.random())));
