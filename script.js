@@ -93,7 +93,7 @@ class Player extends Entity {
   constructor(x, y) {
     super(x,y);
     this.size = 50;
-    this.d = 7;
+    this.d = 10;
     this.facing = 0;
     this.buttons = {
       up: { 
@@ -165,7 +165,7 @@ class Zombie extends Entity {
   constructor(x, y) {
     super(x, y)
     this.size = 50;
-    this.d = 1;
+    this.d = 3;
     this.radius = 10;
     this.color = colorArray[Math.floor(Math.random() * colorArray.length)];
   }
@@ -224,7 +224,7 @@ class Bullet extends Entity {
   constructor(x, y) {
     super(x, y);
     this.size = 5;
-    this.d = 10;
+    this.d = 30;
     this.color = '#000000';
     this.target = {x: entities[1].x, y: entities[1].y};
     this.isBackwards = (this.x > this.target.x && this.y < this.target.y || this.x > this.target.x && this.y > this.target.y);
@@ -260,7 +260,7 @@ var projectiles = [];
 
 var startPos = {
   x: window.innerWidth/2,
-  y: window.innerHeight/4
+  y: window.innerHeight/2
 };
 
 var x = 100;
@@ -296,6 +296,7 @@ function animate() {
 
   let debugInfo = [
     'Debug Info:',
+    'WASD - move | Click - shoot | ',
     entities[0].facing,
     count--,
     epochs,
