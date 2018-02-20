@@ -269,7 +269,9 @@ let score = 0;
 const countStart = 500;
 let epochs = 0;
 let count = -1;
+let rate = 120;
 function init() {
+  rate = 120;
   count = 0;
   entities = [];
   projectiles = [];
@@ -283,7 +285,8 @@ init();
 // game loop  
 
 function animate() {
-  if (entities.length < 100 && !(count % 60)) {
+  if (!(count % 120) && rate !== 1) { rate--; epochs++;}
+  if (entities.length < 1000 && !(count % rate)) {
     entities.push(new Zombie( (innerWidth * Math.random()), innerHeight));
     entities.push(new Zombie( innerWidth, (innerHeight * Math.random())));
     entities.push(new Zombie( 0, (innerHeight * Math.random())));
@@ -295,7 +298,10 @@ function animate() {
     entities[0].facing,
     count--,
     epochs,
-    score
+    score,
+    rate,
+    entities.length,
+    projectiles.length
   ];
 
   const fontSize = '14';
