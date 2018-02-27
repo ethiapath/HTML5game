@@ -240,7 +240,7 @@ function Pointer(x, y) {
 class Bullet extends Entity {
   constructor(x, y) {
     super(x, y);
-    this.size = 5;
+    this.size = 30;
     this.d = 10;
     this.color = '#000000';
     this.target = {x: entities[1].x, y: entities[1].y};
@@ -328,6 +328,7 @@ function init() {
 init();
 
 // game loop  
+const isNotString = e => typeof e !== 'string';
 
 function animate() {
 
@@ -368,7 +369,7 @@ function animate() {
   }  
 
   // remove zombie if hit by projectile
-  projectiles.forEach( i => {
+  projectiles.forEach( (i, j, a) => {
     i.update();
     for (let j = 1; j < entities.length; j++) {
 
@@ -382,12 +383,14 @@ function animate() {
       detectCollison(i, tempPos, (rect1, rect2) => {
         entities[j] = '';
         score++;
+        // a[j] = '';
+        // a = a.filter(isNotString);
       });
     }
 
   });
   // clean up
-  let uncolided = entities.filter( entity => typeof entity !== 'string');
+  let uncolided = entities.filter( isNotString);
   entities = uncolided;
   // if (entities.length <= 2) { init(); } // reset game if there are no zombies
   projectiles = projectiles.filter(isWithinWindow) ;
