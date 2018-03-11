@@ -339,12 +339,13 @@ function animate() {
   let debugInfo = [
     'Debug Info:',
     'WASD - move | Click - shoot | ',
-    count--,
-    epochs,
-    score,
-    rate,
-    entities.length,
-    projectiles.length
+    entities[0].facing,
+    'counter: ' + count--,
+    'epoch: ' + epochs,
+    'score: ' + score,
+    'rate: ' + rate,
+    'num entities: ' + entities.length,
+    'num projectiles: ' + projectiles.length
   ];
 
   const fontSize = '14';
