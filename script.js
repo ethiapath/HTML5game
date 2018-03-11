@@ -37,9 +37,21 @@ window.addEventListener('resize', function() {
 });
 
 // this is just a wraper so that when forEach is called from an object it acts like a for in loop
-Object.prototype.forEach = function (callback) {
-  Object.entries(this).forEach( (d, i) => { callback(d[0], this);});
+Object.prototype.forIn = function (callback) {
+  Object.entries(this).forEach( (d, i) => { callback(d[0], this, i, d);});
 }
+
+const sayStuff = (thingsToBeSaid, whereToSayThem, colorToSayThem = '#000000', howBigToSayThem = '14') => {
+  // draw debug info
+  c.font = howBigToSayThem + 'px serif';
+  c.fillStyle = colorToSayThem;
+  thingsToBeSaid.forEach( (i, n) => {
+    // let iWidth = c.measureText(i).width;
+    c.fillText(i, whereToSayThem.x, whereToSayThem.y + (howBigToSayThem * n));
+  });
+}
+
+const isWithinWindow = o => o.x > 0 && o.x < canvas.width && o.y > 0 && o.y < canvas.height; 
 
 function moveOneRadTowardsTarget(startX, startY, targetX, targetY, radius) {
     var angleRad = facingAngle(startX, startY, targetX, targetY);
@@ -61,7 +73,9 @@ const detectCollison = (rect1, rect2, action) => {
     rect1.size + rect1.y > rect2.y) {
      // collision detected!
      action(rect1, rect2);
+     return true;
  }
+ return false;
 }
 
 class Entity {
@@ -120,7 +134,7 @@ class Player extends Entity {
      // store keydown event to game state in this.buttons obj
     document.addEventListener('keydown', event => {
       // this.keyPressTranslater(event); 
-      this.buttons.forEach( (k, o) => {
+      this.buttons.forIn( (k, o) => {
         if(event.keyCode === o[k].value) {
           o[k].state = true;
         }
@@ -128,7 +142,7 @@ class Player extends Entity {
     });
     // recheck button state from keyup event
     document.addEventListener('keyup', event => {
-      this.buttons.forEach( (k, o) => {
+      this.buttons.forIn( (k, o) => {
         if(event.keyCode === o[k].value) {
           o[k].state = false;
         }
@@ -140,11 +154,18 @@ class Player extends Entity {
      c.fillStyle = 'rgba(255, 100, 0, 0.5)';
      c.fillRect((this.x - this.size/2), (this.y - this.size/2), this.size, this.size);
     //  rotate(this.facing, this.x, this.y);
+    sayStuff([
+      epochs,
+    ],
+    {
+      x: this.x + this.size/2,
+      y: this.y + this.size/2
+    });
   }
 
   // update player state from buttons state
   moving() {
-    this.buttons.forEach( (direction) => {
+    this.buttons.forIn( (direction) => {
       if(this.buttons[direction].state) {
         this.buttons[direction].action();
       } 
@@ -198,19 +219,15 @@ function Pointer(x, y) {
 	this.radius = 5;
 	this.x = x;
 	this.y = y;
-
   this.color = '#000000';
-
-
-
 	this.draw = function() {
 		c.beginPath();
 		c.arc((this.x - this.radius/2), (this.y - this.radius/2), this.radius, 0, Math.PI * 2, false);
     c.fillStyle = this.color;
 		c.stroke();
-		c.fill();
+    c.fill();
+    sayStuff([score], {x: this.x + 10, y: this.y + 10}, '#ff0000');
 	}
-
 	this.update = function() {
     if (mouse.x !== 'undefined' && mouse.y !== 'undefined') {
       this.x = mouse.x;
@@ -223,7 +240,7 @@ function Pointer(x, y) {
 class Bullet extends Entity {
   constructor(x, y) {
     super(x, y);
-    this.size = 5;
+    this.size = 30;
     this.d = 10;
     this.color = '#000000';
     this.target = {x: entities[1].x, y: entities[1].y};
@@ -262,6 +279,34 @@ var startPos = {
   x: window.innerWidth/2,
   y: window.innerHeight/2
 };
+const levels = [
+  () => {
+    entities.push(new Zombie( (innerWidth * Math.random()), 0));
+  },
+  () => {
+    // level load
+    if (!(count % 120) && rate !== 1) { rate--; epochs++;}
+    if (!(score % 10)) { rate /= 2;}
+    if (entities.length < 1000 && !(count % rate)) {
+      entities.push(new Zombie( (innerWidth * Math.random()), innerHeight));
+      entities.push(new Zombie( innerWidth, (innerHeight * Math.random())));
+      entities.push(new Zombie( 0, (innerHeight * Math.random())));
+      entities.push(new Zombie( (innerWidth * Math.random()), 0));
+    }
+  }
+
+
+
+
+]
+const levelLoader = (level) => {
+
+
+
+
+}
+
+
 
 var x = 100;
 var y = 100;
@@ -283,21 +328,17 @@ function init() {
 init();
 
 // game loop  
+const isNotString = e => typeof e !== 'string';
 
 function animate() {
-  if (!(count % 120) && rate !== 1) { rate--; epochs++;}
-  if (!(score % 10)) { rate /= 2;}
-  if (entities.length < 1000 && !(count % rate)) {
-    entities.push(new Zombie( (innerWidth * Math.random()), innerHeight));
-    entities.push(new Zombie( innerWidth, (innerHeight * Math.random())));
-    entities.push(new Zombie( 0, (innerHeight * Math.random())));
-    entities.push(new Zombie( (innerWidth * Math.random()), 0));
-  }
+
+
+  levels[0]();
+
 
   let debugInfo = [
     'Debug Info:',
     'WASD - move | Click - shoot | ',
-    entities[0].facing,
     count--,
     epochs,
     score,
@@ -328,7 +369,7 @@ function animate() {
   }  
 
   // remove zombie if hit by projectile
-  projectiles.forEach( i => {
+  projectiles.forEach( (i, j, a) => {
     i.update();
     for (let j = 1; j < entities.length; j++) {
 
@@ -342,13 +383,17 @@ function animate() {
       detectCollison(i, tempPos, (rect1, rect2) => {
         entities[j] = '';
         score++;
+        // a[j] = '';
+        // a = a.filter(isNotString);
       });
     }
 
   });
-  let uncolided = entities.filter( entity => typeof entity !== 'string');
+  // clean up
+  let uncolided = entities.filter( isNotString);
   entities = uncolided;
-  if (entities.length <= 2) { init(); } // reset game if there are no zombies
+  // if (entities.length <= 2) { init(); } // reset game if there are no zombies
+  projectiles = projectiles.filter(isWithinWindow) ;
   
   for (let i = entities.length-1; i >= 0; i--) {
     entities[i].update();
@@ -356,6 +401,12 @@ function animate() {
   // entities.forEach( e => {
 
   // });
+
+
+  // draw ui
+  let ui = 'score: ' + score + '\n' + 'yoyo' + ' ';
+  let iWidth = c.measureText(ui).width;
+  c.fillText(ui, canvas.width - iWidth -10, 10);
 
   // draw debug info
   c.fillStyle = '#000000';
@@ -367,5 +418,5 @@ function animate() {
 }
 
 // setInterval(function() {
-  animate();
+animate();
 // }, 1000/1)
