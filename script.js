@@ -240,7 +240,7 @@ function Pointer(x, y) {
 class Bullet extends Entity {
   constructor(x, y) {
     super(x, y);
-    this.size = 30;
+    this.size = 5;
     this.d = 10;
     this.color = '#000000';
     this.target = {x: entities[1].x, y: entities[1].y};
