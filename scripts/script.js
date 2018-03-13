@@ -280,7 +280,7 @@ var startPos = {
   x: window.innerWidth/2,
   y: window.innerHeight/2
 };
-const levels = [
+let levels = [
   function() {
     this.goal = () => {
       return score > 100;
@@ -291,8 +291,8 @@ const levels = [
   function() {
     this.goal = () => { return false; }
     // level load
-    if (!(count % 120) && rate !== 1) { rate--; epoch++;}
-    if (!(score % 10)) { rate /= 2;}
+    if (!(count % 120) && rate !== 1) { rate--; }
+    // if (!(score % 10)) { rate /= 2;}
     if (entities.length < 1000 && !(count % rate)) {
       entities.push(new Zombie( (innerWidth * Math.random()), innerHeight));
       entities.push(new Zombie( innerWidth, (innerHeight * Math.random())));
@@ -317,7 +317,7 @@ var y = 100;
 let score = 0;
 const countStart = 500;
 let epoch = 0;
-let count = -1;
+let count = 0;
 let rate = 120;
 function init() {
   rate = 120;
@@ -344,7 +344,7 @@ function animate() {
     'Debug Info:',
     'WASD - move | Click - shoot | ',
     entities[0].facing,
-    'counter: ' + count--,
+    'counter: ' + count,
     'epoch: ' + epoch,
     'score: ' + score,
     'rate: ' + rate,
@@ -379,6 +379,7 @@ function animate() {
     for (let j = 1; j < entities.length; j++) {
 
       // I need to figure out a better way of doing this
+      // or this algo is the only thing that needs the pos data in this way.
       tempPos = {
         x: entities[j].x - entities[j].size/2,
         y: entities[j].y - entities[j].size/2,
@@ -419,7 +420,9 @@ function animate() {
     // let iWidth = c.measureText(i).width;
     c.fillText(i, 5/*canvas.width - iWidth -10*/, (fontSize * n));
   });
-    entities[1].update();
+  entities[1].update();
+  // count is the last thing done in every loop
+  count++;
 }
 
 // setInterval(function() {
