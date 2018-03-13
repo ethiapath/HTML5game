@@ -155,7 +155,7 @@ class Player extends Entity {
      c.fillRect((this.x - this.size/2), (this.y - this.size/2), this.size, this.size);
     //  rotate(this.facing, this.x, this.y);
     sayStuff([
-      epochs,
+      epoch,
     ],
     {
       x: this.x + this.size/2,
@@ -185,6 +185,7 @@ class Player extends Entity {
 class Zombie extends Entity {
   constructor(x, y) {
     super(x, y)
+    this.zombie = true;
     this.size = 50;
     this.d = 1;
     this.radius = 10;
@@ -280,12 +281,17 @@ var startPos = {
   y: window.innerHeight/2
 };
 const levels = [
-  () => {
+  function() {
+    this.goal = () => {
+      return score > 100;
+    }
     entities.push(new Zombie( (innerWidth * Math.random()), 0));
+    if (this.goal) { epoch++; }
   },
-  () => {
+  function() {
+    this.goal = () => { return false; }
     // level load
-    if (!(count % 120) && rate !== 1) { rate--; epochs++;}
+    if (!(count % 120) && rate !== 1) { rate--; epoch++;}
     if (!(score % 10)) { rate /= 2;}
     if (entities.length < 1000 && !(count % rate)) {
       entities.push(new Zombie( (innerWidth * Math.random()), innerHeight));
@@ -294,16 +300,14 @@ const levels = [
       entities.push(new Zombie( (innerWidth * Math.random()), 0));
     }
   }
-
-
-
-
 ]
 const levelLoader = (level) => {
-
-
-
-
+  if (levels.length > level) {
+    levels[level]();
+  } else {
+    let zombies = entities.filter( e => e.hasOwnProperty('zombie'));
+    zombies.forEach( e => e.d++ );
+  }
 }
 
 
@@ -312,12 +316,13 @@ var x = 100;
 var y = 100;
 let score = 0;
 const countStart = 500;
-let epochs = 0;
+let epoch = 0;
 let count = -1;
 let rate = 120;
 function init() {
   rate = 120;
   count = 0;
+  epoch = 0
   entities = [];
   projectiles = [];
   // create player
@@ -332,16 +337,15 @@ const isNotString = e => typeof e !== 'string';
 
 function animate() {
 
-
-  levels[0]();
-
+  // load the level
+  levelLoader(epoch);
 
   let debugInfo = [
     'Debug Info:',
     'WASD - move | Click - shoot | ',
     entities[0].facing,
     'counter: ' + count--,
-    'epoch: ' + epochs,
+    'epoch: ' + epoch,
     'score: ' + score,
     'rate: ' + rate,
     'num entities: ' + entities.length,
