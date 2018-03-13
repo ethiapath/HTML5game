@@ -1,7 +1,9 @@
 const scriptNames = [
     'helper.js',
     'classes.js',
-    'setup.js'
+    'levels.js',
+    'setup.js',
+    'gameloop.js'
 ];
 
 

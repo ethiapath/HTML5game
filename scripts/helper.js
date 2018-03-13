@@ -38,3 +38,5 @@ const detectCollison = (rect1, rect2, action) => {
 }
 
 
+
+const isWithinWindow = o => o.x > 0 && o.x < canvas.width && o.y > 0 && o.y < canvas.height; 
