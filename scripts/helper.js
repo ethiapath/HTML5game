@@ -37,6 +37,13 @@ const detectCollison = (rect1, rect2, action) => {
  return false;
 }
 
-
-
 const isWithinWindow = o => o.x > 0 && o.x < canvas.width && o.y > 0 && o.y < canvas.height; 
+
+
+
+
+// this is just a wraper so that when forEach is called from an object it acts like a for in loop
+// it's also a bad idea in retrospect but I'm already using in a few places and don't want to change.
+Object.prototype.forIn = function (callback) {
+  Object.entries(this).forEach( (d, i) => { callback(d[0], this, i, d);});
+}

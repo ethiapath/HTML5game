@@ -35,10 +35,7 @@ window.addEventListener('resize', function() {
   init();
 });
 
-// this is just a wraper so that when forEach is called from an object it acts like a for in loop
-Object.prototype.forIn = function (callback) {
-  Object.entries(this).forEach( (d, i) => { callback(d[0], this, i, d);});
-}
+
 
 function rotate(angle, x, y) {
   c.translate(x, y);
@@ -46,11 +43,3 @@ function rotate(angle, x, y) {
   c.translate(-x, -y);
 }
 
-var entities = [];
-
-var projectiles = [];
-
-var startPos = {
-  x: window.innerWidth/2,
-  y: window.innerHeight/2
-};

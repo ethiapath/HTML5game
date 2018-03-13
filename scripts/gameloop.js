@@ -1,11 +1,20 @@
-
-var x = 100;
-var y = 100;
+// global vars
 let score = 0;
 const countStart = 500;
 let epoch = 0;
 let count = 0;
 let rate = 120;
+
+var entities = [];
+
+var projectiles = [];
+
+var startPos = {
+  x: window.innerWidth/2,
+  y: window.innerHeight/2
+};
+
+// reset to init state and add players
 function init() {
   rate = 120;
   count = 0;
