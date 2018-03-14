@@ -97,7 +97,7 @@ class Zombie extends Entity {
     super(x, y)
     this.zombie = true;
     this.size = 50;
-    this.d = 1;
+    this.d = 4;
     this.radius = 10;
     this.color = colorArray[Math.floor(Math.random() * colorArray.length)];
   }
