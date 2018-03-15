@@ -24,6 +24,7 @@ function init() {
   // create player
   entities.push(new Player(startPos.x, startPos.y));
   entities.push(new Pointer(mouse.x, mouse.y));
+  // zombieSpeeder(5);
 }
 
 init();
@@ -100,7 +101,6 @@ function gameLoop() {
     entities[i].update();
   }
 
-  // count is the last thing done in every loop
   count++;
 }
 

@@ -39,7 +39,7 @@ const detectCollison = (rect1, rect2, action) => {
 
 const isWithinWindow = o => o.x > 0 && o.x < canvas.width && o.y > 0 && o.y < canvas.height; 
 
-
+const getObjName = obj => obj.__proto__.constructor.name;
 
 
 // this is just a wraper so that when forEach is called from an object it acts like a for in loop
@@ -47,3 +47,14 @@ const isWithinWindow = o => o.x > 0 && o.x < canvas.width && o.y > 0 && o.y < ca
 Object.prototype.forIn = function (callback) {
   Object.entries(this).forEach( (d, i) => { callback(d[0], this, i, d);});
 }
+
+const getReturn = item => item;
+
+const getWorldArray = entities;//getReturn( entities );
+
+const getAllOfName = name => 
+  getWorldArray.filter( e => {
+    e.__proto__.constructor.name === name
+});
+
+const zombieSpeeder = getAllOfName('zombie').forEach( z => z.d = speed );
