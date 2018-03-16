@@ -25,4 +25,4 @@ class NetworkWrapper {
 
 }
 
-NetworkWrapper.recive = () => 'the is a function';
+NetworkWrapper.prototype.recive = () => 'the is a function';

@@ -5,7 +5,10 @@ var http = require("http"),
     shell = require("shelljs");
     port = process.argv[2] || 8888;
 
+
+
 const scriptNames = [
+  'NetworkWrapper.js',
   'setup.js',
   'helper.js',
   'classes.js',
