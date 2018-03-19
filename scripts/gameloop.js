@@ -1,3 +1,5 @@
+
+
 // global vars
 let score = 0;
 const countStart = 500;
@@ -5,9 +7,7 @@ let epoch = 0;
 let count = 0;
 let rate = 120;
 
-var entities = [];
 
-var projectiles = [];
 
 var startPos = {
   x: window.innerWidth/2,
@@ -62,6 +62,11 @@ function animateLoop() {
 }
 
 function gameLoop() {
+  // shim reference that needs to be updated
+  enemyArr = entities.slice(2);
+
+
+
   levelLoader(epoch);
   // c.fillStyle  = '#000000';//colorArray[Math.floor(Math.random() * colorArray.length)];
   // c.fillRect(0, 0, innerWidth, innerHeight);
@@ -134,3 +139,5 @@ function debugStuff() {
     c.fillText(i, 5 /*canvas.width - iWidth -10*/, (fontSize * n));
   });
 }
+
+

@@ -1,3 +1,5 @@
+
+
 var canvas = document.querySelector('canvas');
 
 canvas.width = window.innerWidth;
@@ -51,3 +53,7 @@ const masterControl = {
     return this.timeAlive; 
   } 
 }*/
+// will replace with objects
+var entities = [];
+
+var projectiles = [];
