@@ -6,7 +6,6 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 var c = canvas.getContext('2d');
-var audioCtx = new AudioContext();
 
 var mouse = {
   x: undefined,
@@ -55,5 +54,12 @@ const masterControl = {
 }*/
 // will replace with objects
 var entities = [];
-
+/* potential replacement (will require refactor)
+var entities = {
+  enemys: []/{},
+  players: {}, // important design decision that will enable multiplayer down the line
+  projectiles: [] // because why not. the collision code will have to get more complex down the line 
+  to handle different players being collided with. 
+}
 var projectiles = [];
+*/

@@ -63,50 +63,59 @@ function animateLoop() {
 
 function gameLoop() {
   // shim reference that needs to be updated
-  enemyArr = entities.slice(2);
-
-
-
+  enemyArr = entities.slice(2); // will exclude player and pointer obj
   levelLoader(epoch);
   // c.fillStyle  = '#000000';//colorArray[Math.floor(Math.random() * colorArray.length)];
   // c.fillRect(0, 0, innerWidth, innerHeight);
   // update entities state and draw them
   // reset game if zombie touches player
-  for (let i = 1; i < entities.length; i++) {
-    detectCollison(entities[0], entities[i], (rect1, rect2) => {
-      score = 0;
-      init();
-    });
-  }
+  this.PlayerInfectedCheck();
   // remove zombie if hit by projectile
-  projectiles.forEach((i, j, a) => {
-    i.update();
-    for (let j = 1; j < entities.length; j++) {
-      // I need to figure out a better way of doing this
-      // or this algo is the only thing that needs the pos data in this way.
-      tempPos = {
-        x: entities[j].x - entities[j].size / 2,
-        y: entities[j].y - entities[j].size / 2,
-        size: entities[j].size
-      };
-      detectCollison(i, tempPos, (rect1, rect2) => {
-        entities[j] = '';
-        score++;
-        // a[j] = '';
-        // a = a.filter(isNotString);
-      });
-    }
-  });
-  // clean up
-  let uncolided = entities.filter(isNotString);
-  entities = uncolided;
+  this.zombieHitCheck();
   // if (entities.length <= 2) { init(); } // reset game if there are no zombies
-  projectiles = projectiles.filter(isWithinWindow);
-  for (let i = entities.length - 1; i >= 0; i--) {
-    entities[i].update();
-  }
+  this.projUpdate();
 
   count++;
+
+
+/*=======End of Loop=======*/
+  function projUpdate() {
+    projectiles = projectiles.filter(isWithinWindow);
+    for (let i = entities.length - 1; i >= 0; i--) {
+      entities[i].update();
+    }
+  }
+  function zombieHitCheck() {
+    projectiles.forEach((i, j, a) => {
+      i.update();
+      for (let j = 1; j < entities.length; j++) {
+        // I need to figure out a better way of doing this
+        // or this algo is the only thing that needs the pos data in this way.
+        tempPos = {
+          x: entities[j].x - entities[j].size / 2,
+          y: entities[j].y - entities[j].size / 2,
+          size: entities[j].size
+        };
+        detectCollison(i, tempPos, (rect1, rect2) => {
+          entities[j] = '';
+          score++;
+          // a[j] = '';
+          // a = a.filter(isNotString);
+        });
+      }
+    });
+    // clean up
+    let uncolided = entities.filter(isNotString);
+    entities = uncolided;
+  }
+  function PlayerInfectedCheck() {
+    for (let i = 1; i < entities.length; i++) {
+      detectCollison(entities[0], entities[i], (rect1, rect2) => {
+        score = 0;
+        init();
+      });
+    }
+  }
 }
 
 function debugStuff() {
