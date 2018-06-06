@@ -1,10 +1,14 @@
+
+
+
+let enemyArr = entities;
 let levels = [
   {
     goal: () => {
       return score > 100;
     },
     update: () => {
-      entities.push(new Zombie( (innerWidth * Math.random()), 0));
+      enemyArr.push(new Zombie( (innerWidth * Math.random()), 0));
       // goal
       if (score > 100) { epoch++; }
     }
@@ -15,11 +19,11 @@ let levels = [
       if (!(count % 120) && rate !== 1) { rate--; }
       
       // if (!(score % 10)) { rate /= 2;}
-      if (entities.length < 1000 && !(count % rate)) {
-        entities.push(new Zombie( (innerWidth * Math.random()), innerHeight));
-        entities.push(new Zombie( innerWidth, (innerHeight * Math.random())));
-        entities.push(new Zombie( 0, (innerHeight * Math.random())));
-        entities.push(new Zombie( (innerWidth * Math.random()), 0));
+      if (enemyArr.length < 1000 && !(count % rate)) {
+        enemyArr.push(new Zombie( (innerWidth * Math.random()), innerHeight));
+        enemyArr.push(new Zombie( innerWidth, (innerHeight * Math.random())));
+        enemyArr.push(new Zombie( 0, (innerHeight * Math.random())));
+        enemyArr.push(new Zombie( (innerWidth * Math.random()), 0));
       }
       if ( this.goal ) { epoch++; }
     }
@@ -28,11 +32,11 @@ let levels = [
     hasRun: false,
     init: () => {
       // zombies get faster
-      let zombies = entities.filter( e => e.hasOwnProperty('zombie'));
+      let zombies = enemyArr.filter( e => e.hasOwnProperty('zombie'));
       zombies.forEach( e => e.d++ );
     },
     update: () => {
-      entities.push(new Zombie( (innerWidth * Math.random()), innerHeight));
+      enemyArr.push(new Zombie( (innerWidth * Math.random()), innerHeight));
       // goal
       // if (score > 100) { epoch++; }
     }  
@@ -54,3 +58,7 @@ const levelLoader = (level) => {
   }
   currentLevel = level;
 }
+
+
+
+

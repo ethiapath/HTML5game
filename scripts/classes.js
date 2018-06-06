@@ -1,3 +1,6 @@
+
+
+
 class Entity {
   constructor(x, y) {
     this.x = x;
@@ -9,7 +12,6 @@ class Entity {
 
   }
   update() {
-    this.draw();
   }
 }
 
@@ -88,7 +90,6 @@ class Player extends Entity {
     // update game state from based on this.buttons state
     this.moving();
 
-    this.draw();
   }
 }
   
@@ -122,7 +123,6 @@ class Zombie extends Entity {
     this.x += pos.x;
     this.y += pos.y;
 
-    this.draw();
   }
 }
   
@@ -175,10 +175,12 @@ class Bullet extends Entity {
 
     this.x += movement.x;
     this.y += movement.y;
-    this.draw();
   }
 }
 document.addEventListener('click', (event) => {
   projectiles.push(new Bullet(entities[0].x, entities[0].y));
   console.log('clicked!')
 })
+
+
+

@@ -1,4 +1,5 @@
 const scriptNames = [
+    'NetworkWrapper.js',
     'helper.js',
     'classes.js',
     'levels.js',
