@@ -180,5 +180,7 @@ class Bullet extends Entity {
 document.addEventListener('click', (event) => {
   projectiles.push(new Bullet(entities[0].x, entities[0].y));
   console.log('clicked!')
-});
+})
+
+
 

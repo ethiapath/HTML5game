@@ -1,6 +1,7 @@
 
 
 
+
 function  facingAngle(startX, startY, targetX, targetY) {
   return Math.atan((startY-targetY)/(startX-targetX)); 
 }
@@ -51,15 +52,14 @@ Object.prototype.forIn = function (callback) {
   Object.entries(this).forEach( (d, i) => { callback(d[0], this, i, d);});
 }
 
-const getReturn = item => item;
 
-const getWorldArray = entities;//getReturn( entities );
 
 const getAllOfName = name => 
-  getWorldArray.filter( e => {
+  entities.filter( e => {
     e.__proto__.constructor.name === name
 });
 
 const zombieSpeeder = getAllOfName('zombie').forEach( z => z.d = speed );
+
 
 

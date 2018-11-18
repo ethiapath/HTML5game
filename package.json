@@ -1,0 +1,23 @@
+{
+  "name": "html5-shooter",
+  "version": "1.0.0",
+  "description": "link: https://ethiapath.github.io/HTML5game/",
+  "main": "script.js",
+  "dependencies": {
+    "shelljs": "^0.8.2"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ethiapath/HTML5game.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ethiapath/HTML5game/issues"
+  },
+  "homepage": "https://github.com/ethiapath/HTML5game#readme"
+}
