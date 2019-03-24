@@ -10,6 +10,9 @@ let rate = 120;
 
 var entities = [];
 
+const zombieSpeeder = getAllOfName('zombie').forEach( z => z.d = speed );
+
+
 var projectiles = [];
 
 var startPos = {
@@ -110,6 +113,7 @@ function gameLoop() {
 function debugStuff() {
   c.fillStyle = '#000000';
   let debugInfo = [
+    '',
     'Debug Info:',
     'WASD - move | Click - shoot | ',
     entities[0].facing,
