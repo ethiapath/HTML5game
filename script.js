@@ -169,7 +169,7 @@ const getAllOfName = name =>
 
 class Entity {
   constructor(x, y) {
-    this.observers = [];
+    this.observers = {};
     this.x = x;
     this.y = y;
     this.d = 1;
@@ -180,14 +180,14 @@ class Entity {
   }
   update() {
   }
-  subscribe(f) {
-    this.observers.push(f)
+  subscribe(event, f) {
+    this.observers[f] = []
   }
-  unsubscribe(f) {
-    this.observers = this.observers.filter(subscriber => subscriber !== f)
+  unsubscribe(event, f) {
+    this.observers[f] = this.observers[f].filter(subscriber => subscriber !== f)
   }
-  notify(data) {
-    this.observers.forEach(observer => observer(data))
+  notify(event, data) {
+    this.observers[f].forEach(observer => observer(data))
   }
 }
 
