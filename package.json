@@ -1,0 +1,23 @@
+{
+  "name": "HTML5game",
+  "version": "1.0.0",
+  "description": "Live at: pew.ethiapath.com",
+  "main": "concatScripts.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ethiapath/HTML5game.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ethiapath/HTML5game/issues"
+  },
+  "homepage": "https://github.com/ethiapath/HTML5game#readme",
+  "dependencies": {
+    "responsive-gamepad": "^1.1.0"
+  }
+}

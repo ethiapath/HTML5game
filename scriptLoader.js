@@ -1,5 +1,6 @@
 
-
+// This will load scripts in scriptNames dynamically
+// into the html file that included it
 
 const scriptNames = [
     'helper.js',
