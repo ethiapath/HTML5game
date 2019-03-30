@@ -117,18 +117,38 @@ class Player extends Entity {
         action: () => {this.x += this.d;}
       }
     }
-     // store keydown event to game state in this.buttons obj
+    // store keydown event to game state in this.buttons obj
     document.addEventListener('keydown', event => {
       // this.keyPressTranslater(event); 
+      //     const directions = {
+      //       '87': 'up',
+      //       '83': 'down',
+      //       '65': 'left',
+      //       '68': 'right'
+      //     }
+      // // use object to handle specific keycodes
+
+      // const dirToValue = (bool) => {
+      //   directions[event.keyCode].state = Boolean(bool);
+      // }
+      
+      // dirToValue(true);
+
       this.buttons.forEach( (k, o) => {
+        
         if(event.keyCode === o[k].value) {
           o[k].state = true;
+
         }
+
       });
     });
+  
     // recheck button state from keyup event
     document.addEventListener('keyup', event => {
+
       this.buttons.forEach( (k, o) => {
+        
         if(event.keyCode === o[k].value) {
           o[k].state = false;
         }
